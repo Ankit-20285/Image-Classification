@@ -1,3 +1,10 @@
 numpy==1.26.4
 matplotlib==3.8.4
 tensorflow==2.21.0
+fastapi==0.142.2
+uvicorn[standard]==0.51.0
+python-multipart==0.0.32
+pillow==10.3.0
+pydantic==2.13.5
+pytest==9.1.1
+httpx==0.28.1

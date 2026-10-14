@@ -30,7 +30,7 @@ model = Sequential([
     Flatten(),
     Dense(128, activation='relu'),
     Dropout(0.3),
-    Dense(6, activation='sigmoid')
+    Dense(6, activation='softmax')
 ])
 
 train_ds = tf.keras.utils.image_dataset_from_directory(

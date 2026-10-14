@@ -1,19 +1,38 @@
+
+# Python cache
 __pycache__/
 *.py[cod]
+*$py.class
 
+# Virtual environments
 venv/
 .venv/
+env/
 
-dataset/
-data/
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
 
-.ipynb_checkpoints/
-
-logs/
-tensorboard_logs/
-
+# Environment variables and secrets
 .env
+.env.*
+!.env.example
 
+# Local database
+*.db
+*.sqlite3
+
+# Uploaded images and generated files
+uploads/
+
+# IDE and OS files
 .vscode/
+.idea/
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
+
+

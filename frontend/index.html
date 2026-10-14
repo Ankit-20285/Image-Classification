@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VisionAI – Image classification</title>
+  <meta name="description" content="Upload an image and let a custom-trained CNN identify the scene." />
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip" href="#classify">Skip to classifier</a>
+
+  <!-- A. Navigation -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="VisionAI home">
+        <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+          <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b6cff"/><stop offset="1" stop-color="#4aa3ff"/></linearGradient></defs>
+          <path d="M2.5 16C6.500 9.500 11 7 16 7s9.500 2.500 13.500 9C25.500 22.500 21 25 16 25S6.500 22.500 2.500 16z" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linejoin="round"/>
+          <circle cx="16" cy="16" r="3.800" fill="url(#lg)"/>
+        </svg>
+        <span>VisionAI</span>
+      </a>
+      <nav id="site-nav" class="links" aria-label="Primary">
+        <a href="#classify">Classify</a>
+        <a href="#history">History</a>
+        <a href="#about">About</a>
+      </nav>
+      <div class="nav-right">
+        <span class="status"><i aria-hidden="true"></i>AI Model Ready</span>
+        <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- B. Hero -->
+    <section class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="wrap hero-inner">
+        <span class="badge">Powered by Deep Learning</span>
+        <h1>See Beyond the Image.</h1>
+        <p class="lede">Upload an image and let AI identify what it sees in seconds.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#classify">Classify an Image</a>
+          <a class="btn btn-ghost" href="#history">Explore Predictions</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- C + D. Workspace -->
+    <section id="classify" class="wrap workspace" aria-labelledby="classify-title">
+      <h2 id="classify-title" class="sr-only">Classify an image</h2>
+      <div class="work-grid">
+        <div class="card upload-card">
+          <input id="file-input" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" hidden />
+
+          <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Drop an image here or press Enter to browse files">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.500" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            <p class="dz-title">Drag an image here</p>
+            <p class="dz-sub">JPG, JPEG, PNG or WEBP, up to 5 MiB</p>
+            <button type="button" class="btn btn-ghost" id="browse-btn">Browse files</button>
+          </div>
+
+          <div id="preview" class="preview" hidden>
+            <img id="preview-img" alt="Preview of the selected image" />
+            <div class="file-row">
+              <div class="file-meta">
+                <strong id="file-name"></strong>
+                <span id="file-size"></span>
+              </div>
+              <div class="file-actions">
+                <button type="button" class="btn btn-ghost btn-sm" id="change-btn">Change</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="remove-btn">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <p id="upload-error" class="msg-error" role="alert" hidden></p>
+          <button type="button" class="btn btn-primary btn-block" id="analyze-btn">Analyze Image</button>
+        </div>
+
+        <div class="card result-card" id="results" aria-live="polite" aria-busy="false"></div>
+      </div>
+    </section>
+
+    <!-- E. History -->
+    <section id="history" class="wrap section" aria-labelledby="history-title">
+      <div class="section-head">
+        <div>
+          <h2 id="history-title">Prediction history</h2>
+          <p class="muted" id="history-note"></p>
+        </div>
+        <div class="filters">
+          <label class="field"><span class="sr-only">Search by filename</span>
+            <input type="search" id="history-search" placeholder="Search filename" autocomplete="off" />
+          </label>
+          <label class="field"><span class="sr-only">Filter by category</span>
+            <select id="history-filter"></select>
+          </label>
+        </div>
+      </div>
+      <div class="card hist-card">
+        <div class="hist-head" aria-hidden="true"><span>Image</span><span>Filename</span><span>Prediction</span><span>Confidence</span><span>Time</span></div>
+        <ul id="history-list" class="hist-list"></ul>
+        <div id="history-empty" class="empty" hidden></div>
+      </div>
+      <div class="center"><button type="button" class="btn btn-ghost" id="history-more" hidden></button></div>
+    </section>
+
+    <!-- F. Categories -->
+    <section id="categories" class="wrap section" aria-labelledby="cat-title">
+      <h2 id="cat-title">Supported categories</h2>
+      <p class="muted">The model sorts every image into one of six scene types.</p>
+      <ul id="category-grid" class="cat-grid"></ul>
+    </section>
+
+    <!-- G. About -->
+    <section id="about" class="wrap section" aria-labelledby="about-title">
+      <div class="about">
+        <div>
+          <h2 id="about-title">About the model</h2>
+          <p class="muted">VisionAI uses a custom-trained convolutional neural network to classify scene photos. This page is a frontend prototype and is not yet connected to the model.</p>
+        </div>
+        <dl class="facts">
+          <div class="card"><dt>Architecture</dt><dd>Convolutional Neural Network (CNN)</dd></div>
+          <div class="card"><dt>Framework</dt><dd>TensorFlow / Keras</dd></div>
+          <div class="card"><dt>Input size</dt><dd>150 × 150 pixels</dd></div>
+          <div class="card"><dt>Classes</dt><dd>6</dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <!-- H. Footer -->
+  <footer class="footer">
+    <div class="wrap foot-inner">
+      <div>
+        <a class="brand" href="#top"><span>VisionAI</span></a>
+        <p class="muted">Scene classification with a custom-trained CNN.</p>
+      </div>
+      <nav aria-label="Footer"><a href="#classify">Classify</a><a href="#history">History</a><a href="#about">About</a></nav>
+      <p class="built">Built with FastAPI and TensorFlow</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
