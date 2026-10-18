@@ -103,6 +103,8 @@ function sceneDataUri(cls) {
 const resultsEl = $("results");
 
 function renderResultIdle() {
+  // resultsEl.innerHTML = `<div class="state"><h3>Results appear here</h3><p>Choose an image, then select Analyze Image.</p></div>`;
+   console.trace("renderResultIdle() called");
   resultsEl.innerHTML = `<div class="state"><h3>Results appear here</h3><p>Choose an image, then select Analyze Image.</p></div>`;
 }
 function renderResultLoading() {
@@ -227,7 +229,12 @@ async function handleAnalyze() {
   renderResultLoading();
   try {
     const data = await predictImage(selectedFile);
+    console.log("1. API response:", data);
     renderResult(data, previewDataUrl);
+    console.log("2. Result rendered successfully");
+    setTimeout(() => {
+  console.log("3. Results panel after 1 second:", resultsEl.innerText);
+}, 1000);
 
     
     if (USE_MOCK_API) {

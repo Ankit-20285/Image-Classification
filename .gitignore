@@ -23,6 +23,9 @@ htmlcov/
 *.db
 *.sqlite3
 
+# Database maintenance scripts
+clear_db.py
+
 # Uploaded images and generated files
 uploads/
 
