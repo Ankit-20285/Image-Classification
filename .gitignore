@@ -30,7 +30,8 @@ clear_db.py
 uploads/
 
 # IDE and OS files
-.vscode/
+.vscode/*
+!.vscode/settings.json
 .idea/
 .DS_Store
 Thumbs.db
